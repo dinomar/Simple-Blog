@@ -1,0 +1,18 @@
+section#posts.posts
+    if posts.length > 0
+        each post in posts
+            article
+                h2
+                    span.highlight #{post["title-highlight"]}
+                    |  #{post["title-restof"]}
+                p.article-body #{post["body"]}
+                section.btn.btn-offset
+                    a.more(href="/full?id=" + post.id) Read Full
+                p.article-date Created on #{post["date"]}
+    else
+        article.nopost
+            p #{errorMessage}
+            
+    if posts.length == 10
+        section.btn
+            a.next(href="" + nextPage) Next Page

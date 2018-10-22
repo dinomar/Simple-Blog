@@ -1,0 +1,23 @@
+section.editor
+    nav
+        ul
+            if post._id && edit
+                li#btnEditPublish Publish
+                li#btnEditSave Save
+                li
+                    a(href="/full?id=" + post._id) View
+                li
+                    a(href="/admin") Close
+            else
+                li#btnPublish Publish
+                li#btnSave Save
+                li
+                    a(href="/admin") Close
+            
+    div.textbox
+        if post.title && post.body
+            input(name="title", id="title", type="text", placeholder="Title", value="" + post.title, autocomplete="off")
+            textarea(name="body", id="body") #{post.body}
+        else
+            input(name="title", id="title", type="text", placeholder="Title", autocomplete="off")
+            textarea(name="body", id="body")

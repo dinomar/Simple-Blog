@@ -1,0 +1,11 @@
+section#posts.posts
+    if posts.length > 0
+        article
+            h2
+                span.highlight #{posts[0]["title-highlight"]}
+                |  #{posts[0]["title-restof"]}
+            p.article-body #{posts[0]["body"]}
+            p.article-date Created on #{posts[0]["date"]}
+    else
+        article.nopost
+            p #{errorMessage}

@@ -1,0 +1,17 @@
+aside.sidebar
+    nav
+        ul
+            if selected == "posts"
+                li.selected Posts
+                li Comments
+                li Settings
+            
+            if selected == "comments"
+                li Posts
+                li.selected Comments
+                li Settings
+                
+            if selected == "settings"
+                li Posts
+                li Comments
+                li.selected Settings
