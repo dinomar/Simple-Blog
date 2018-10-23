@@ -39,6 +39,7 @@ const postHandler = (publish) => {
 };
 
 const updateHandler = (publish) => {
+    const id = $("#id").val();
     const title = $("#title").val();
     const body = $("#body").val();
     
@@ -50,7 +51,8 @@ const updateHandler = (publish) => {
     const options = { 
         method: "PUT",
         url: "/admin/editor",
-        date: {
+        data: {
+            id: id,
             title: title,
             body: body,
             publish: publish
@@ -103,7 +105,39 @@ const editSaveClicked = () => {
     Posts Panel
 =================================
 */
+const deleteHandler = (id) => {
+    //check fields
+    if(!id) { 
+        return null;
+    }
+    
+    const options = { 
+        method: "DELETE",
+        url: "/admin/editor",
+        data: {
+            id: id
+        } 
+    };
+    
+    //Delete data
+    $.ajax(options)
+     .done((data) => {
+        
+        if (!data) {
+            console.log("ERROR");
+            return null;
+        }
+        
+        //refresh
+        window.location.replace("/admin");
+    });
+};
 
+const deleteClicked = (e) => {
+    //Show "Confirm Delete Message?"
+    const id = e.target.id;
+    deleteHandler(id);
+};
 
 /*
 =================================
@@ -117,5 +151,6 @@ $(document).ready(function (){
     $("#btnEditPublish").on('click', editPublishClicked);
     $("#btnEditSave").on('click', editSaveClicked);
     
-    //delete btn clicked
+    //Btn Delete
+    $(".btnDelete").on('click', deleteClicked);
 });

@@ -73,29 +73,19 @@ module.exports = function (app) {
 			//update
 		})
 		
-		//Delete post | return 'admin-posts'
+		//Delete post | return json
 		.delete((req, res) => {
 			if(!req.body.id) {
-				return res.render('admin-posts', { selected: "posts", posts: [] });
+				return res.json({});
 			}
 			
 			postHandler.del(req.body.id, (err) => {
 				if (err) {
 					console.log(err);
-					return res.render('admin-posts', { selected: "posts", posts: [] }); //add err msg
+					return res.json({});
 				}
 				
-				//return all post to admin-posts
-				postHandler.getAll((err, posts) => {
-					if (err) {
-						console.log(err);
-						return res.render('admin-posts', { selected: "posts", posts: [] });
-					}
-					
-					// return posts
-					return res.render('admin-posts', { selected: "posts", posts: posts }); //add success msg
-				});
-				
+				return res.json({ message: "OK" });
 			});
 		});
 		

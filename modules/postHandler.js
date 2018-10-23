@@ -178,5 +178,6 @@ module.exports = {
 	get,
 	search,
 	getFull,
-	getAll
+	getAll,
+	del
 };

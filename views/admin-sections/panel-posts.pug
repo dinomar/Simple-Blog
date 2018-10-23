@@ -9,5 +9,6 @@ section.panel
                 li
                     a(href="/admin/editor?id=" + post._id) Edit
                 li
-                    a(href="/full?id=" + post._id) View
-                li Delete
+                    a(href="/full?id=" + post._id, target="_blank") View
+                li
+                    a.btnDelete(href="#", id="" + post._id) Delete
