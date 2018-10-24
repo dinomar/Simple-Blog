@@ -3,7 +3,6 @@
     Editor
 =================================
 */
-
 const postHandler = (publish) => {
     const title = $("#title").val();
     const body = $("#body").val();
@@ -63,6 +62,8 @@ const updateHandler = (publish) => {
     $.ajax(options)
      .done((data) => {
         
+        console.log(data);
+        
         if (!data) {
             console.log("ERROR");
             return null;
@@ -71,6 +72,7 @@ const updateHandler = (publish) => {
         if (publish) {
             //Publish | redirect to /admin
             window.location.replace("/admin");
+            console.log("Edit: published!");
         } else {
             //Save | redirect to /editor
             //window.location.replace("/admin/editor?id=" + data._id);
@@ -90,13 +92,16 @@ const saveClicked = () => {
     postHandler(false);
 };
 
-//Edit
-const editPublishClicked = () => {
-    updateHandler(true);
-};
 
+//Edit
 const editSaveClicked = () => {
-    updateHandler(false);
+    //if published.clicked | true
+    const publish = $("#status").val();
+    if(publish == "publish") {
+        updateHandler(true);
+    } else {
+        updateHandler(false);
+    }
 };
 
 
@@ -139,6 +144,7 @@ const deleteClicked = (e) => {
     deleteHandler(id);
 };
 
+
 /*
 =================================
     Document Ready
@@ -148,7 +154,6 @@ $(document).ready(function (){
     $("#btnPublish").on('click', publishClicked);
     $("#btnSave").on('click', saveClicked);
     
-    $("#btnEditPublish").on('click', editPublishClicked);
     $("#btnEditSave").on('click', editSaveClicked);
     
     //Btn Delete

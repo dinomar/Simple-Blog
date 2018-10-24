@@ -2,7 +2,6 @@ section.editor
     nav
         ul
             if post._id && edit
-                li#btnEditPublish Publish
                 li#btnEditSave Save
                 li
                     a(href="/full?id=" + post._id, target="_blank") View
@@ -17,7 +16,17 @@ section.editor
     div.textbox
         if post.title && post.body
             input(name="id" id="id", type="hidden", value="" + post._id)
-            input(name="title", id="title", type="text", placeholder="Title", value="" + post.title, autocomplete="off")
+            
+            div.textboxControls
+                input(id="title", type="text", placeholder="Title", value="" + post.title, autocomplete="off")
+                select(id="status")
+                    if post.published == true
+                        option(value="publish" selected) Publish
+                        option(value="draft") Draft
+                    else
+                        option(value="publish") Publish
+                        option(value="draft" selected) Draft
+            
             textarea(name="body", id="body") #{post.body}
         else
             input(name="title", id="title", type="text", placeholder="Title", autocomplete="off")

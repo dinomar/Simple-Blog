@@ -109,7 +109,7 @@ const get = (page, next) => {
 	});
 };
 
-const getAll = (next) => {
+const getList = (next) => {
 	const selects = {_id: 1, title: 1, created_on: 1};
 	Post.find({})
 	.select(selects)
@@ -124,7 +124,7 @@ const getAll = (next) => {
 };
 
 const getFull = (id, next) => {
-	const selects = {_id: 1, title: 1, body: 1, created_on: 1};
+	const selects = {_id: 1, title: 1, body: 1, created_on: 1, published: 1};
 	Post.find({ _id: id})
 	.select(selects)
 	.limit(1)
@@ -137,13 +137,13 @@ const getFull = (id, next) => {
 	});
 };
 
-const edit = (id, title, body, next) => {
-	Post.updateOne({ _id: id }, { title: title, body: body }, (err, res) => {
+const edit = (id, title, body, publish, next) => {
+	Post.updateOne({ _id: id }, { title: title, body: body, published: publish }, (err, post) => {
 		if (err) {
 			return next(err);
 		}
 		
-		return next(null, res);
+		return next(null, post);
 	});
 };
 
@@ -178,6 +178,7 @@ module.exports = {
 	get,
 	search,
 	getFull,
-	getAll,
-	del
+	getList,
+	del,
+	edit
 };

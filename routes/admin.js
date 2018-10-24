@@ -6,7 +6,7 @@ module.exports = function (app) {
 	app.route('/admin')
 	
 		.get((req, res) => {
-			postHandler.getAll((err, posts) => {
+			postHandler.getList((err, posts) => {
 				if (err) {
 					console.log(err);
 					return res.render('admin-posts', { selected: "posts", posts: [] });
@@ -70,7 +70,18 @@ module.exports = function (app) {
 		
 		//Update post from editor
 		.put((req, res) => {
-			//update
+			if(!req.body.id || !req.body.title || !req.body.body || !req.body.publish) {
+				return res.json({}); // msg : error missing paramaters
+			}
+			
+			postHandler.edit(req.body.id, req.body.title, req.body.body, req.body.publish, (err, post) => {
+				if (err) {
+					console.log(err);
+					return res.json({});
+				}
+				
+				return res.json(post);
+			});
 		})
 		
 		//Delete post | return json

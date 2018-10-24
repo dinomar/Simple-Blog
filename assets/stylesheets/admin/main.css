@@ -193,7 +193,7 @@ header nav li{
 }
 
 .sidebar li {
-    margin: 5px 5px 5px 10%;
+    margin: 5px 5px 5px 5px;
     padding: 5px 0px 5px 15%;
 }
 
@@ -298,14 +298,14 @@ footer {
     padding: 5px 0px 5px 10px;
 }
 
+
+/*
+=======================================
+    Editor Textbox
+=======================================
+*/
 .textbox {
     display: grid;
-}
-
-.textbox input {
-	height: 30px;
-    width: 260px;
-    margin: 12px 5px 0px 5px;
 }
 
 .textbox textarea {
@@ -314,9 +314,22 @@ footer {
     resize: none;
 }
 
+.textboxControls {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    margin: 12px 5px 0px 5px;
+}
 
+#title {
+	height: 30px;
+    width: 80%;
+}
 
-
+#status {
+    justify-self: end;
+    height: 30px;
+    width: 120px;
+}
 
 
 
