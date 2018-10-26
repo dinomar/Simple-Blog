@@ -225,7 +225,7 @@ header nav li{
 .post-info {
     padding: 0 0 0 10px;
 	display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 60% 20% 20%;
 }
 
 .post-info li {
@@ -243,6 +243,11 @@ header nav li{
 
 .date {
     font-size: 80%;
+}
+
+.status {
+    font-size: 90%;
+    text-align: center;
 }
 
 /*

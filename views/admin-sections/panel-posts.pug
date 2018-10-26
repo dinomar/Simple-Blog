@@ -4,6 +4,10 @@ section.panel
             ul.post-info
                 li #{post.title}
                 li.date #{post.date}
+                if post.published
+                    li.status Published
+                else
+                    li.status Draft
 
             ul.post-controls
                 li

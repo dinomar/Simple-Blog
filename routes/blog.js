@@ -2,6 +2,22 @@
 const bodyParser = require('body-parser');
 const postHandler = require('../modules/postHandler');
 
+
+/*
+/
+GET | Return home page with posts
+    |postHandler.get
+
+/search
+GET | return home page with search results
+    |postHandler.search
+
+/full
+GET | return full-article with full post
+    |postHandler.getFull
+*/
+
+
 module.exports = function (app) {
 
 	app.route('/')
@@ -24,7 +40,7 @@ module.exports = function (app) {
 		});
 		
 		
-	app.route('/search')
+	app.route('/search') //results
 	
 		.get((req, res) => {
 			let page = 1;
@@ -47,18 +63,6 @@ module.exports = function (app) {
 				const nextPage = "/search?page=" + (page + 1);
 				return res.render('home', { posts: posts, errorMessage: "No posts", nextPage: nextPage });
 			});
-		})
-		
-		.post((req, res) => {
-			
-		})
-		
-		.put((req, res) => {
-			
-		})
-		
-		.delete((req, res) => {
-			
 		});
 		
 		
@@ -77,18 +81,6 @@ module.exports = function (app) {
 				
 				return res.render('full-article', { posts: post, errorMessage: "Not found" });
 			});
-		})
-		
-		.post((req, res) => {
-			
-		})
-		
-		.put((req, res) => {
-			
-		})
-		
-		.delete((req, res) => {
-			
 		});
 
 }

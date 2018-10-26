@@ -110,7 +110,7 @@ const get = (page, next) => {
 };
 
 const getList = (next) => {
-	const selects = {_id: 1, title: 1, created_on: 1};
+	const selects = {_id: 1, title: 1, created_on: 1, published: 1};
 	Post.find({})
 	.select(selects)
 	.sort({ created_on: -1})

@@ -11,6 +11,8 @@ const postSchema = new Schema({
 	updated_on: Date
 });
 
+
+//add date to post
 postSchema.pre('save', function() {
 	const currentDate = new Date();
 	
@@ -24,5 +26,4 @@ postSchema.pre('save', function() {
 });
 
 const Post = mongoose.model('Post', postSchema);
-
 module.exports = Post;

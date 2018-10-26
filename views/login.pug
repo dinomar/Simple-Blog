@@ -1,0 +1,26 @@
+doctype 5
+html(lang="en")
+    head
+        meta(charset="utf-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1, shrink-to-fit=no")
+        meta(name="description", content="")
+        meta(name="author", content="")
+        link(rel="icon", href="../../../../favicon.ico")
+        title Login
+        link(rel="stylesheet", href="/stylesheets/login/main.css")
+        script(src="https://code.jquery.com/jquery-3.3.1.min.js")
+        script(src="/scripts/admin/login.js")
+    body
+        main
+            form(action="/admin/login", method="POST", id="loginForm")
+                h2 Administration
+                div.container.userContainer
+                    label(for="username") Username:
+                    input(type="text", name="username", id="username", placeholder="Admin")
+                
+                div.container.passContainer
+                    label(for="password") Password:
+                    input(type="password", name="password", id="password", placeholder="******")
+                    
+                div.btn
+                    span#btnSubmit Log in
