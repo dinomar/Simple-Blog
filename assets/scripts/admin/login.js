@@ -4,6 +4,6 @@ const btnSubmitClicked = () => {
 
 $(document).ready(function(){
     
-    $("#btnSubmit").on('click', btnSubmitClicked);
+    //$("#btnSubmit").on('click', btnSubmitClicked);
     
 });
