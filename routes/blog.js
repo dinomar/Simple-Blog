@@ -1,6 +1,8 @@
 'use strict';
 const bodyParser = require('body-parser');
-const postHandler = require('../modules/postHandler');
+//const postHandler = require('../modules/postHandler');
+const Post = require('../models/post');
+const helpers = require('../modules/helpers.js');
 
 
 /*
@@ -27,20 +29,33 @@ module.exports = function (app) {
 			if(req.query.page) {
 				page = req.query.page;
 			}
-			postHandler.get(page, (err, posts) => {
+			
+			Post.getPaged(page, (err, posts) => {
 				if (err) {
 					console.log(err);
-					return res.render('home', { posts: [], errorMessage: "Error: could not load any posts.", nextPage: "#" }); 
+					const options = {
+						posts: [],
+						errorMessage: "Error: could not load any posts.",
+						nextPage: "#"
+					};
+					return res.render('home', options); 
 				}
 				
-				// return posts
-				const nextPage = "/?page=" + (page + 1);
-				return res.render('home', { posts: posts, errorMessage: "No posts", nextPage: nextPage });
+				posts = helpers.truncatePosts(posts);
+				posts = helpers.addDate(posts);
+				posts = helpers.formatTitle(posts);
+				
+				const options = {
+					posts: posts,
+					errorMessage: "No posts",
+					nextPage: "/?page=" + (page + 1)
+				};
+				return res.render('home', options);
 			});
 		});
 		
 		
-	app.route('/search') //results
+	app.route('/results') // search
 	
 		.get((req, res) => {
 			let page = 1;
@@ -53,15 +68,27 @@ module.exports = function (app) {
 				q = req.query.q;
 			}
 			
-			postHandler.search(page, q, (err, posts) => {
+			Post.search(page, q, (err, posts) => {
 				if (err) {
 					console.log(err);
-					return res.render('home', { posts: [], errorMessage: "Error: could not load any posts.", nextPage: "" });
+					const options = {
+						posts: [],
+						errorMessage: "Error: could not load any posts.",
+						nextPage: ""
+					};
+					return res.render('home', options);
 				}
 				
-				// return posts
-				const nextPage = "/search?page=" + (page + 1);
-				return res.render('home', { posts: posts, errorMessage: "No posts", nextPage: nextPage });
+				posts = helpers.truncatePosts(posts);
+				posts = helpers.addDate(posts);
+				posts = helpers.formatTitle(posts);
+				
+				const options = {
+					posts: posts,
+					errorMessage: "No posts",
+					nextPage: "/results?page=" + (page + 1)
+				};
+				return res.render('home', options);
 			});
 		});
 		
@@ -70,16 +97,31 @@ module.exports = function (app) {
 	
 		.get((req, res) => {
 			if(!req.query.id) {
-				return res.render('home', { posts: [], errorMessage: "Error: No article to load." });
+				const options = {
+					posts: [],
+					errorMessage: "Error: No article to load."
+				};
+				return res.render('home', options);
 			}
 			
-			postHandler.getFull(req.query.id, (err, post) => {
+			Post.getSingle(req.query.id, (err, posts) => {
 				if (err) {
 					console.log(err);
-					return res.render('home', { posts: [], errorMessage: "Error: could not load article." });
+					const options = {
+						posts: [],
+						errorMessage: "Error: could not load article."
+					};
+					return res.render('home', options);
 				}
 				
-				return res.render('full-article', { posts: post, errorMessage: "Not found" });
+				posts = helpers.addDate(posts);
+				posts = helpers.formatTitle(posts);
+				
+				const options = {
+					posts: posts,
+					errorMessage: "Not found"
+					};
+				return res.render('full-article', options);
 			});
 		});
 

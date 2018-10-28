@@ -42,6 +42,7 @@ adminSchema.statics.authenticate = function(username, password, next) {
 		});
 };
 
+
 //hash password before saving
 adminSchema.pre('save', function(next) {
 	bcrypt.hash(this.password, 10, (err, hash) => {

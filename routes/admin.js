@@ -1,6 +1,7 @@
 'use strict';
-const postHandler = require('../modules/postHandler');
+const Post = require('../models/post');
 const Admin = require('../models/administrator');
+const helpers = require('../modules/helpers.js');
 
 /*
 /admin
@@ -39,14 +40,25 @@ module.exports = function (app) {
 	app.route('/admin')
 	
 		.get(requiresLogin, (req, res) => {
-			postHandler.getList((err, posts) => {
+			
+			Post.getAll((err, posts) => {
 				if (err) {
 					console.log(err);
-					return res.render('admin-posts', { selected: "posts", posts: [] });
+					const options = {
+						selected: "posts",
+						posts: []
+						};
+					return res.render('admin-posts', options);
 				}
 				
-				// return posts
-				return res.render('admin-posts', { selected: "posts", posts: posts });
+				posts = helpers.addDate(posts);
+				posts = helpers.formatTitle(posts);
+				
+				const options = {
+					selected: "posts",
+					posts: posts
+					};
+				return res.render('admin-posts', options);
 			});
 		});
 		
@@ -56,16 +68,30 @@ module.exports = function (app) {
 		//Return post for editor to edit | return editor || return editor with post
 		.get(requiresLogin, (req, res) => {
 			if(!req.query.id) {
-				return res.render('admin-editor', { post: {}, edit: false });
+				const options = {
+					post: {},
+					edit: false
+				};
+				return res.render('admin-editor', options);
 			}
 			
-			postHandler.getFull(req.query.id, (err, post) => {
+			Post.getSingle(req.query.id, (err, posts) => {
 				if (err) {
 					console.log(err);
-					return res.render('admin-editor', { post: {} });
+					const options = {
+						post: {}
+					};
+					return res.render('admin-editor', options);
 				}
 				
-				return res.render('admin-editor', { post: post[0], edit: true });
+				posts = helpers.addDate(posts);
+				posts = helpers.formatTitle(posts);
+				
+				const options = {
+					post: posts[0],
+					edit: true
+				};
+				return res.render('admin-editor', options);
 			});
 		})
 		
@@ -80,12 +106,19 @@ module.exports = function (app) {
 				publish = req.body.publish;
 			}
 			
-			postHandler.create(req.body.title, req.body.body, req.body.publish, (err, post) => {
+			const post = new Post({
+				title: req.body.title,
+				body: req.body.body,
+				published: publish
+			});
+			
+			post.save((err, result) => {
 				if (err) {
 					console.log(err);
 					return res.json({});
 				}
-				return res.json(post);
+				
+				return res.json(result);
 			});
 		})
 		
@@ -95,29 +128,29 @@ module.exports = function (app) {
 				return res.json({}); // msg : error missing paramaters
 			}
 			
-			postHandler.edit(req.body.id, req.body.title, req.body.body, req.body.publish, (err, post) => {
+			Post.edit(req.body.id, req.body.title, req.body.body, req.body.publish, (err, result) => {
 				if (err) {
 					console.log(err);
-					return res.json({});
+					return res.json({}); // msg : error
 				}
 				
-				return res.json(post);
+				return res.json(result);
 			});
 		})
 		
 		//Delete post | return json
 		.delete(requiresLogin, (req, res) => {
 			if(!req.body.id) {
-				return res.json({});
+				return res.json({}); // msg : error missing paramaters
 			}
 			
-			postHandler.del(req.body.id, (err) => {
+			Post.deleteOne({ _id: req.body.id }, (err) => {
 				if (err) {
 					console.log(err);
-					return res.json({});
+					return res.json({}); // msg : error
 				}
 				
-				return res.json({ message: "OK" });
+				return res.json({ message: "OK" }); // msg : msg ok
 			});
 		});
 		
@@ -130,13 +163,15 @@ module.exports = function (app) {
 		
 		.post((req, res) => {
 			if(!req.body.username || !req.body.password) {
-				console.log("missing params!");
+				console.log("Login: missing params!");
 				return res.render('login', {});
+				//return res.json({}); // msg : error
 			}
 			
 			Admin.authenticate(req.body.username, req.body.password, (err, user) => {
 				if(err || !user) {
 					return res.render('login', {});
+					//return res.json({}); // msg : error username, pass incorrect.
 				}
 				
 				req.session.userId = user._id;
@@ -155,14 +190,14 @@ module.exports = function (app) {
 			req.session.destroy((err) => {
 				if(err) {
 					console.log(err);
-					return err;
+					throw err;
 				}
 				return res.redirect('/');
 			});
 		});
 		
 		
-	app.route('/admin/create')
+	/* app.route('/admin/create')
 	
 		.get((req, res) => {
 			//create admin user
@@ -179,6 +214,6 @@ module.exports = function (app) {
 				}
 				return res.json(user);
 			});
-		});
+		}); */
 
 }
