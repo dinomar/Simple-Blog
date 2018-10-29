@@ -1,1 +1,1 @@
-Simple Node CMS Blog
+Simple Node.js CMS Blog
